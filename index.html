@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOARD GAMES</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif; /* Standard font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Fully transparent background */
+            color: black; /* Standard text color */
+            text-align: center;
+        }
+
+        #quiz-container {
+            background-color: transparent; /* Fully transparent container */
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white; /* Change the answer color to white */
+        }
+
+        #next-button {
+            background-color: white; /* Change background color to white */
+            color: black; /* Change text color to black for visibility */
+            border: 2px solid #ff9900; /* Optional: Add a border for better visibility */
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00; /* Change hover color for better effect */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="George Michael Logo">
+    <h1>BOARD GAMES</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
+    </div>
+</div>
+
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: "What is the object of the game 'Monopoly'?", answer: "To bankrupt all other players by acquiring properties and charging rent." },
+        { question: "What year was 'Monopoly' first released?", answer: "1935." },
+        { question: "What classic game involves solving the murder of Mr. Boddy in a mansion?", answer: "Clue (or Cluedo)." },
+        { question: "In chess, which piece can move in an L-shape?", answer: "Knight." },
+        { question: "What game features tiles with letters used to form words on a board?", answer: "Scrabble." },
+        { question: "What is the highest number of points achievable with a single word in 'Scrabble'?", answer: "1778 points, with the word 'oxyphenbutazone.'" },
+        { question: "Which board game simulates the rise and fall of civilizations?", answer: "Risk." },
+        { question: "What board game involves matching numbered tiles and originates from China?", answer: "Mahjong." },
+        { question: "In the game 'Settlers of Catan,' what resource is NOT a part of the original game?", answer: "Gold." },
+        { question: "In 'Monopoly,' which property is the most expensive?", answer: "Boardwalk." },
+        { question: "Which game uses tiny ships to try and sink your opponent's fleet?", answer: "Battleship." },
+        { question: "In chess, which piece has the most freedom of movement?", answer: "Queen." },
+        { question: "What classic board game uses small plastic pieces to represent human organs for 'surgery'?", answer: "Operation." },
+        { question: "Which strategic game involves global domination and is known for long play sessions?", answer: "Risk." },
+        { question: "In 'Trivial Pursuit,' how many categories of questions are there?", answer: "Six." },
+        { question: "What is the goal of the game 'The Game of Life'?", answer: "To have the highest net worth at the end of the game." },
+        { question: "In 'Candy Land,' which character is the villain?", answer: "Lord Licorice." },
+        { question: "What color are the hotels in 'Monopoly'?", answer: "Red." },
+        { question: "In 'Scrabble,' how many tiles are drawn at the start of the game?", answer: "7." },
+        { question: "What is the object of the game 'Battleship'?", answer: "To sink all of your opponent's ships." },
+        { question: "What game is played on a hexagonal board and involves trading resources?", answer: "Settlers of Catan." },
+        { question: "Which board game involves guessing who, what weapon, and where a murder took place?", answer: "Clue (Cluedo)." },
+        { question: "Which game requires players to answer questions to collect wedges in a pie?", answer: "Trivial Pursuit." },
+        { question: "What board game has players try to escape a maze by rotating the board?", answer: "Labyrinth." },
+        { question: "In the game 'Risk,' what continent offers the largest army bonus?", answer: "Asia." },
+        { question: "In 'Ticket to Ride,' what do players collect to build train routes?", answer: "Colored train cards." },
+        { question: "In chess, what is it called when the king cannot escape from capture?", answer: "Checkmate." },
+        { question: "Which board game involves rolling pigs like dice?", answer: "Pass the Pigs." },
+        { question: "What color is the $500 bill in Monopoly?", answer: "Orange." },
+        { question: "In 'Connect Four,' how many pieces must be connected to win?", answer: "Four." },
+        { question: "In chess, how many squares are there on a standard board?", answer: "64." },
+        { question: "What is the name of the detective in the board game Clue?", answer: "Inspector Brown." },
+        { question: "In 'Settlers of Catan,' how many resources are there?", answer: "Five (wood, brick, wheat, sheep, and ore)." },
+        { question: "In the game 'Sorry!,' what color are the four player pieces?", answer: "Red, blue, yellow, and green." },
+        { question: "What board game is known for its interlocking word tiles?", answer: "Scrabble." },
+        { question: "In 'Risk,' how many players can play at once in the classic version?", answer: "Up to 6 players." },
+        { question: "In 'Monopoly,' how much money does a player collect when passing 'Go'?", answer: "$200." },
+        { question: "Which game uses a spinner to determine the number of spaces to move?", answer: "The Game of Life." },
+        { question: "In chess, how many pawns does each player start with?", answer: "Eight." },
+        { question: "What game features black and white discs and involves flipping your opponent's pieces?", answer: "Othello." },
+        { question: "In the game 'Clue,' which weapon is NOT an option?", answer: "Gun (it’s not a weapon in the original version)." },
+        { question: "What color is the $1 bill in 'Monopoly'?", answer: "White." },
+        { question: "In 'Candy Land,' what are players trying to reach?", answer: "King Kandy's Castle." },
+        { question: "What is the shape of the board in 'Settlers of Catan'?", answer: "Hexagonal." },
+        { question: "In 'Ticket to Ride,' what is the longest train route you can claim?", answer: "6 spaces." },
+        { question: "Which game involves moving pieces around a cross-shaped board, aiming to reach home first?", answer: "Sorry!" },
+        { question: "How many dice are used in the game 'Monopoly'?", answer: "Two." },
+        { question: "In chess, what is the only piece that can 'castle' with the king?", answer: "Rook." },
+        { question: "What game involves sliding tiles to match numbers on a board?", answer: "Rummikub." },
+        { question: "In 'Risk,' what is the maximum number of armies a player can receive for controlling all of North America?", answer: "5 armies." },
+        { question: "In the game 'Mousetrap,' what triggers the Rube Goldberg machine?", answer: "A marble." },
+        { question: "What classic board game has players buying and selling property on streets of Atlantic City?", answer: "Monopoly." },
+        { question: "In chess, how many squares can a rook move at once?", answer: "As many as available in a straight line." },
+        { question: "In 'The Game of Life,' what do you collect throughout the game?", answer: "Money and 'Life' cards." },
+        { question: "What is the object of the game 'Pictionary'?", answer: "To guess what your teammate is drawing." },
+        { question: "In 'Catan,' how many points does a player need to win?", answer: "10 victory points." },
+        { question: "What is the goal of 'Jenga'?", answer: "To not topple the tower of blocks." },
+        { question: "Which game involves spelling words using tiles with numbers assigned to each letter?", answer: "Scrabble." },
+        { question: "In 'Risk,' what is the ultimate objective?", answer: "World domination." },
+        { question: "In 'Monopoly,' what is the cost of landing on Luxury Tax?", answer: "$75." },
+        { question: "In chess, what is the name of the opening move that involves moving the knight?", answer: "Knight’s opening." },
+        { question: "Which game uses pawns, ladders, and slides on a grid to reach the top?", answer: "Chutes and Ladders (Snakes and Ladders)." },
+        { question: "What is the first piece moved in a standard chess game?", answer: "Pawn (typically the king's or queen's pawn)." },
+        { question: "What card game is often played alongside 'Monopoly' as a fast-paced version?", answer: "Monopoly Deal." },
+        { question: "In 'Settlers of Catan,' how many points does the 'Longest Road' card give?", answer: "2 points." },
+        { question: "In 'Clue,' how many characters can players choose from?", answer: "Six." },
+        { question: "In 'Ticket to Ride,' how many trains does each player start with?", answer: "45 trains." },
+        { question: "In chess, what is it called when a pawn reaches the other side of the board?", answer: "Promotion." },
+        { question: "What game involves stacking and removing blocks without causing the structure to fall?", answer: "Jenga." },
+        { question: "In 'Sorry!,' what is the maximum number of spaces a player can move in one turn?", answer: "12 spaces." },
+        { question: "In 'Risk,' which country in South America connects to North America?", answer: "Venezuela." }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    // Shuffle the questions
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // Start the quiz
+    shuffle(quizData);
+    showQuestion();
+
+    function showQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        questionContainer.innerText = quizData[currentQuestionIndex].question;
+        answerContainer.innerText = "Loading answer...";
+
+        // Fade in effect
+        answerContainer.classList.remove("fadeIn");
+        answerContainer.classList.add("fadeOut");
+
+        setTimeout(() => {
+            answerContainer.innerText = quizData[currentQuestionIndex].answer;
+            answerContainer.classList.remove("fadeOut");
+            answerContainer.classList.add("fadeIn");
+        }, 500);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            showQuestion();
+        } else {
+            const questionContainer = document.getElementById("question");
+            const answerContainer = document.getElementById("answer");
+            questionContainer.innerText = "Thank you for playing!";
+            answerContainer.innerText = "";
+            document.getElementById("next-button").style.display = "none"; // Hide the next button
+        }
+    }
+</script>
+
+</body>
+</html>
